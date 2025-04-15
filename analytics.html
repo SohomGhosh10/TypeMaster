@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster - Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/api/placeholder/50/50" alt="TypeMaster Logo">
+            <h1>TypeMaster</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-keyboard"></i> Typing Test</a></li>
+            <li><a href="voice-typing.html"><i class="fas fa-microphone"></i> Voice Typing</a></li>
+            <li><a href="analytics.html" class="active"><i class="fas fa-chart-line"></i> Analytics</a></li>
+            <li><a href="#" id="login-btn"><i class="fas fa-user"></i> Login</a></li>
+        </ul>
+        <div class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container analytics-container">
+            <div class="analytics-header">
+                <h2>Your Typing Performance</h2>
+                <div class="date-filter">
+                    <button class="date-btn active" data-period="week">Week</button>
+                    <button class="date-btn" data-period="month">Month</button>
+                    <button class="date-btn" data-period="year">Year</button>
+                    <button class="date-btn" data-period="all">All Time</button>
+                </div>
+            </div>
+
+            <div class="analytics-tabs">
+                <button class="tab-btn active" data-tab="overview">Overview</button>
+                <button class="tab-btn" data-tab="speed">Speed</button>
+                <button class="tab-btn" data-tab="accuracy">Accuracy</button>
+                <button class="tab-btn" data-tab="comparison">Comparison</button>
+            </div>
+
+            <div class="analytics-content">
+                <div class="tab-content active" id="overview-tab">
+                    <div class="stats-summary">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="stat-details">
+                                <h3>Average Speed</h3>
+                                <p class="stat-value"><span id="avg-speed">0</span> WPM</p>
+                                <p class="stat-change positive"><i class="fas fa-arrow-up"></i> <span id="speed-change">0</span>% from last week</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                            <div class="stat-details">
+                                <h3>Average Accuracy</h3>
+                                <p class="stat-value"><span id="avg-accuracy">0</span>%</p>
+                                <p class="stat-change positive"><i class="fas fa-arrow-up"></i> <span id="accuracy-change">0</span>% from last week</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-keyboard"></i></div>
+                            <div class="stat-details">
+                                <h3>Tests Completed</h3>
+                                <p class="stat-value"><span id="tests-completed">0</span></p>
+                                <p class="stat-change positive"><i class="fas fa-arrow-up"></i> <span id="tests-change">0</span> from last week</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-stopwatch"></i></div>
+                            <div class="stat-details">
+                                <h3>Time Practicing</h3>
+                                <p class="stat-value"><span id="practice-time">0</span> min</p>
+                                <p class="stat-change positive"><i class="fas fa-arrow-up"></i> <span id="time-change">0</span> min from last week</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Progress Overview</h3>
+                        <canvas id="overview-chart"></canvas>
+                    </div>
+
+                    <div class="recent-tests">
+                        <h3>Recent Tests</h3>
+                        <table class="tests-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>WPM</th>
+                                    <th>Accuracy</th>
+                                    <th>Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-tests-body">
+                                <!-- Test data will be populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="speed-tab">
+                    <div class="chart-container">
+                        <h3>Speed Performance</h3>
+                        <canvas id="speed-chart"></canvas>
+                    </div>
+
+                    <div class="stats-detail">
+                        <div class="detail-card">
+                            <h4>Highest Speed</h4>
+                            <p class="large-stat"><span id="highest-speed">0</span> WPM</p>
+                            <p>Achieved on <span id="highest-speed-date">--/--/----</span></p>
+                        </div>
+                        <div class="detail-card">
+                            <h4>Weekly Goal</h4>
+                            <div class="progress-container">
+                                <div class="progress-bar" id="speed-goal-progress"></div>
+                            </div>
+                            <p><span id="current-speed">0</span> / <span id="speed-goal">0</span> WPM</p>
+                        </div>
+                        <div class="detail-card">
+                            <h4>Speed Distribution</h4>
+                            <canvas id="speed-distribution"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="accuracy-tab">
+                    <div class="chart-container">
+                        <h3>Accuracy Performance</h3>
+                        <canvas id="accuracy-chart"></canvas>
+                    </div>
+
+                    <div class="stats-detail">
+                        <div class="detail-card">
+                            <h4>Highest Accuracy</h4>
+                            <p class="large-stat"><span id="highest-accuracy">0</span>%</p>
+                            <p>Achieved on <span id="highest-accuracy-date">--/--/----</span></p>
+                        </div>
+                        <div class="detail-card">
+                            <h4>Weekly Goal</h4>
+                            <div class="progress-container">
+                                <div class="progress-bar" id="accuracy-goal-progress"></div>
+                            </div>
+                            <p><span id="current-accuracy">0</span>% / <span id="accuracy-goal">0</span>%</p>
+                        </div>
+                        <div class="detail-card">
+                            <h4>Error Analysis</h4>
+                            <canvas id="error-analysis"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="comparison-tab">
+                    <div class="comparison-header">
+                        <h3>Compare Your Performance</h3>
+                        <div class="comparison-filter">
+                            <select id="comparison-type">
+                                <option value="typing">Keyboard Typing</option>
+                                <option value="voice">Voice Typing</option>
+                            </select>
+                            <select id="comparison-metric">
+                                <option value="speed">Speed (WPM)</option>
+                                <option value="accuracy">Accuracy (%)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="comparison-chart"></canvas>
+                    </div>
+
+                    <div class="comparison-insights">
+                        <h4>Performance Insights</h4>
+                        <div class="insight-cards">
+                            <div class="insight-card">
+                                <div class="insight-icon"><i class="fas fa-trophy"></i></div>
+                                <div class="insight-content">
+                                    <h5>You vs. Your Average</h5>
+                                    <p>You are performing <span id="self-comparison">0</span>% better than your average.</p>
+                                </div>
+                            </div>
+                            <div class="insight-card">
+                                <div class="insight-icon"><i class="fas fa-users"></i></div>
+                                <div class="insight-content">
+                                    <h5>You vs. Others</h5>
+                                    <p>You are in the top <span id="percentile">0</span>% of all users.</p>
+                                </div>
+                            </div>
+                            <div class="insight-card">
+                                <div class="insight-icon"><i class="fas fa-chart-line"></i></div>
+                                <div class="insight-content">
+                                    <h5>Growth Rate</h5>
+                                    <p>Your typing skills are improving at <span id="growth-rate">0</span>% per week.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>TypeMaster</h3>
+                <p>Improve your typing speed and accuracy with our professional typing test.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Typing Test</a></li>
+                    <li><a href="voice-typing.html">Voice Typing</a></li>
+                    <li><a href="analytics.html">Analytics</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <p>Email: info@typemaster.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TypeMaster. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="analytics.js"></script>
+</body>
+</html>

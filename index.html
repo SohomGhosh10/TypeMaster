@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster - Typing Speed Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="TypeMaster Logo" height="50" width="50">
+            <h1>TypeMaster</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active"><i class="fas fa-keyboard"></i> Typing Test</a></li>
+            <li><a href="voice-typing.html"><i class="fas fa-microphone"></i> Voice Typing</a></li>
+            <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+            <li><a href="#" id="login-btn"><i class="fas fa-user"></i> Login</a></li>
+        </ul>
+        <div class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="typing-test">
+                <div class="header">
+                    <h2>Typing Speed Test</h2>
+                    <div class="timer">
+                        <span id="minutes">1</span>:<span id="seconds">00</span>
+                    </div>
+                </div>
+
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                    <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                    <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                </div>
+
+                <div class="text-display" id="text-display"></div>
+                <textarea id="typing-input" placeholder="Start typing here..."></textarea>
+
+                <div class="controls">
+                    <button id="start-btn">Start Test</button>
+                    <button id="reset-btn">Reset</button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <h3>Speed</h3>
+                        <p><span id="wpm">0</span> WPM</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Accuracy</h3>
+                        <p><span id="accuracy">0</span>%</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Characters</h3>
+                        <p><span id="characters">0</span></p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Errors</h3>
+                        <p><span id="errors">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <h3>Recent Performance</h3>
+                <canvas id="recent-performance"></canvas>
+            </div>
+        </div>
+
+        <div class="popup" id="login-popup">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <h2>Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" id="register-link">Register</a></p>
+            </div>
+        </div>
+
+        <div class="popup" id="register-popup">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <h2>Register</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" id="reg-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" required>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+                <p>Already have an account? <a href="#" id="login-link">Login</a></p>
+            </div>
+        </div>
+
+        <div class="popup" id="results-popup">
+            <div class="popup-content results">
+                <span class="close">&times;</span>
+                <h2>Test Results</h2>
+                <div class="results-details">
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="result-stat">
+                            <h3>Speed</h3>
+                            <p><span id="result-wpm">0</span> WPM</p>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="result-stat">
+                            <h3>Accuracy</h3>
+                            <p><span id="result-accuracy">0</span>%</p>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-keyboard"></i></div>
+                        <div class="result-stat">
+                            <h3>Characters</h3>
+                            <p><span id="result-characters">0</span></p>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="result-stat">
+                            <h3>Errors</h3>
+                            <p><span id="result-errors">0</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-chart-container">
+                    <canvas id="result-chart"></canvas>
+                </div>
+                <div class="result-actions">
+                    <button id="save-result">Save Result</button>
+                    <button id="try-again">Try Again</button>
+                    <button id="share-result">Share Result</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>TypeMaster</h3>
+                <p>Improve your typing speed and accuracy with our professional typing test.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Typing Test</a></li>
+                    <li><a href="voice-typing.html">Voice Typing</a></li>
+                    <li><a href="analytics.html">Analytics</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <p>Email: info@typemaster.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TypeMaster. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
